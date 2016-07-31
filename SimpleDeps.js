@@ -12017,7 +12017,7 @@ CryptoJS.pad.Iso10126 = {
                     return new ECKey(d, compressed)
                 };
                 ECKey.prototype.toWIF = function (network) {
-                    network = network || networks.bitcoin;
+                    network = network || networks.florincoin;
                     var bufferLen = this.pub.compressed ? 34 : 33;
                     var buffer = new Buffer(bufferLen);
                     buffer.writeUInt8(network.wif, 0);
@@ -12402,7 +12402,7 @@ CryptoJS.pad.Iso10126 = {
                 }
 
                 function sign(privKey, message, network) {
-                    network = network || networks.bitcoin;
+                    network = network || networks.florincoin;
                     var hash = magicHash(message, network);
                     var signature = privKey.sign(hash);
                     var e = BigInteger.fromBuffer(hash);
@@ -12458,9 +12458,23 @@ CryptoJS.pad.Iso10126 = {
                     feePerKb: 1e4,
                     estimateFee: estimateFee("testnet")
                 },
+                litecoin: {
+                    magicPrefix: "Litecoin Signed Message:\n",
+                    bip32: {
+                        "public": 27108450,
+                        "private": 27106558
+                    },
+                    pubKeyHash: 48,
+                    scriptHash: 5,
+                    wif: 176,
+                    dustThreshold: 0,
+                    dustSoftThreshold: 1e5,
+                    feePerKb: 1e5,
+                    estimateFee: estimateFee("litecoin")
+                },
                 florincoin: {
-                    magicPrefix: "Florincoin Signed Message:\n",
-                    bip32: {"public": 27108450, "private": 27106558},
+                    magicPrefix: "\x1bFlorincoin Signed Message:\n",
+                    bip32: {"public": 27108450, "private": 27106558}, // ToDo: Look into this.
                     pubKeyHash: 35,
                     scriptHash: 8,
                     wif: 163,
@@ -13000,7 +13014,7 @@ CryptoJS.pad.Iso10126 = {
                 var Script = require("./script");
 
                 function Transaction() {
-                    this.version = 1;
+                    this.version = 2;
                     this.locktime = 0;
                     this.ins = [];
                     this.outs = []
